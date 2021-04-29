@@ -422,56 +422,6 @@ namespace OctupusX_Basic {
         let tempbuf = pins.createBufferFromArray(cmdWrite)
         writeAndReadBuf(tempbuf, 16);
     }
-
-    ///////////////////////////////////////////////////////RJpin_to_pin
-    function RJpin_to_analog(Rjpin: AnalogRJPin): any {
-        let pin = AnalogPin.P1
-        switch (Rjpin) {
-            case AnalogRJPin.J1:
-                pin = AnalogPin.P1
-                break;
-            case AnalogRJPin.J2:
-                pin = AnalogPin.P2
-                break;
-        }
-        return pin
-    }
-    function RJpin_to_digital(Rjpin: DigitalRJPin): any {
-        let pin = DigitalPin.P1
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pin = DigitalPin.P8
-                break;
-            case DigitalRJPin.J2:
-                pin = DigitalPin.P12
-                break;
-            case DigitalRJPin.J3:
-                pin = DigitalPin.P14
-                break;
-            case DigitalRJPin.J4:
-                pin = DigitalPin.P16
-                break;
-        }
-        return pin
-    }
-
-    ///////////////////////////////enum
-    export enum DigitalRJPin {
-        //% block="J1" 
-        J1,
-        //% block="J2"
-        J2,
-        //% block="J3"
-        J3,
-        //% block="J4"
-        J4
-    }
-    export enum AnalogRJPin {
-        //% block="J1"
-        J1,
-        //% block="J2"
-        J2
-    }
     export enum TrackingStateType {
         //% block="● ●" enumval=0
         Tracking_State_0,
@@ -719,20 +669,18 @@ namespace OctupusX_Basic {
     * TODO: get noise(dB)
     * @param noisepin describe parameter here, eg: AnalogRJPin.J1
     */
-    //% blockId="readnoise" block="Noise sensor %Rjpin loudness(dB)"
+    //% blockId="readnoise" block="Noise sensor %UserPin loudness(dB)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function noiseSensor(Rjpin: AnalogRJPin): number {
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
+    export function noiseSensor(userPin: AnalogPin): number {
         let level = 0, voltage = 0, noise = 0, h = 0, l = 0, sumh = 0, suml = 0
         for (let i = 0; i < 1000; i++) {
-            level = level + pins.analogReadPin(pin)
+            level = level + pins.analogReadPin(userPin)
         }
         level = level / 1000
         for (let i = 0; i < 1000; i++) {
-            voltage = pins.analogReadPin(pin)
+            voltage = pins.analogReadPin(userPin)
             if (voltage >= level) {
                 h += 1
                 sumh = sumh + voltage
@@ -832,16 +780,15 @@ namespace OctupusX_Basic {
     * TODO: get light intensity(lux)
     * @param lightintensitypin describe parameter here, eg: AnalogRJPin.J1
     */
-    //% blockId="lightSensor" block="Light sensor %Rjpin light intensity(lux)"
+    //% blockId="lightSensor" block="Light sensor %UserPin light intensity(lux)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function lightSensor(Rjpin: AnalogRJPin): number {
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
+    export function lightSensor(userPin: AnalogPin): number {
+
         let voltage = 0, lightintensity = 0;
         for (let index = 0; index < 100; index++) {
-            voltage = voltage + pins.analogReadPin(pin)
+            voltage = voltage + pins.analogReadPin(userPin)
         }
         voltage = voltage / 100
         if (voltage < 200) {
@@ -859,16 +806,14 @@ namespace OctupusX_Basic {
     * TODO: get soil moisture(0~100%)
     * @param soilmoisturepin describe parameter here, eg: AnalogRJPin.J1
     */
-    //% blockId="readsoilmoisture" block="Soil moisture sensor %Rjpin value(0~100)"
+    //% blockId="readsoilmoisture" block="Soil moisture sensor %UserPin value(0~100)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function soilHumidity(Rjpin: AnalogRJPin): number {
+    export function soilHumidity(userPin: AnalogPin): number {
         let voltage = 0, soilmoisture = 0;
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
         voltage = pins.map(
-            pins.analogReadPin(pin),
+            pins.analogReadPin(userPin),
             0,
             1023,
             0,
@@ -882,16 +827,14 @@ namespace OctupusX_Basic {
     * get water level value (0~100)
     * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
     */
-    //% blockId="readwaterLevel" block="Water level sensor %Rjpin value(0~100)"
+    //% blockId="readwaterLevel" block="Water level sensor %UserPin value(0~100)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function waterLevel(Rjpin: AnalogRJPin): number {
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
+    export function waterLevel(userPin: AnalogPin): number {
         let voltage = 0, waterlevel = 0;
         voltage = pins.map(
-            pins.analogReadPin(pin),
+            pins.analogReadPin(userPin),
             50,
             600,
             0,
@@ -908,14 +851,12 @@ namespace OctupusX_Basic {
     * get UV level value (0~15)
     * @param waterlevelpin describe parameter here, eg: AnalogRJPin.J1
     */
-    //% blockId="readUVLevel" block="UV sensor %Rjpin level(0~15)"
+    //% blockId="readUVLevel" block="UV sensor %UserPin level(0~15)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function UVLevel(Rjpin: AnalogRJPin): number {
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
-        let UVlevel = pins.analogReadPin(pin);
+    export function UVLevel(userPin: AnalogPin): number {
+        let UVlevel = pins.analogReadPin(userPin);
         if (UVlevel > 625) {
             UVlevel = 625
         }
@@ -928,30 +869,26 @@ namespace OctupusX_Basic {
         );
         return Math.round(UVlevel)
     }
-    //% blockId="gasValue" block="%sensor Gas sensor %Rjpin concentration value"
+    //% blockId="gasValue" block="%sensor Gas sensor %UserPin concentration value"
     //% Rjpin.fieldEditor="gridpicker" Rjpin.fieldOptions.columns=2
     //% sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function gasValue(sensor: GasList, Rjpin: AnalogRJPin): number {
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
+    export function gasValue(sensor: GasList, userPin: AnalogPin): number {
         if(sensor==GasList.Co2){
-            return 1024-pins.analogReadPin(pin)
+            return 1024-pins.analogReadPin(userPin)
         }
-        return pins.analogReadPin(pin)
+        return pins.analogReadPin(userPin)
     }
     /**
     * check crash
     */
-    //% blockId=Crash block="Crash Sensor %Rjpin is pressed"
+    //% blockId=Crash block="Crash Sensor %UserPin is pressed"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor group="Digital" color=#EA5532 
-    export function Crash(Rjpin: DigitalRJPin): boolean {
-        let pin = DigitalPin.P1
-        pin = RJpin_to_digital(Rjpin)
-        pins.setPull(pin, PinPullMode.PullUp)
-        if (pins.digitalReadPin(pin) == 0) {
+    export function Crash(userPin: DigitalPin): boolean {
+        pins.setPull(userPin, PinPullMode.PullUp)
+        if (pins.digitalReadPin(userPin) == 0) {
             return true
         }
         else {
@@ -961,42 +898,22 @@ namespace OctupusX_Basic {
     /**
 * get Ultrasonic distance
 */
-    //% blockId=sonarbit block="Ultrasonic sensor %Rjpin distance %distance_unit"
+    //% blockId=sonarbit block="3-Line Ultrasonic sensor %UserPin distance %distance_unit"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% distance_unit.fieldEditor="gridpicker"
     //% distance_unit.fieldOptions.columns=2
     //% subcategory=Sensor group="Digital" color=#EA5532
-    export function ultrasoundSensor(Rjpin: DigitalRJPin, distance_unit: Distance_Unit_List): number {
-        let pinT = DigitalPin.P1
-        let pinE = DigitalPin.P2
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pinT = DigitalPin.P1
-                pinE = DigitalPin.P8
-                break;
-            case DigitalRJPin.J2:
-                pinT = DigitalPin.P2
-                pinE = DigitalPin.P12
-                break;
-            case DigitalRJPin.J3:
-                pinT = DigitalPin.P13
-                pinE = DigitalPin.P14
-                break;
-            case DigitalRJPin.J4:
-                pinT = DigitalPin.P15
-                pinE = DigitalPin.P16
-                break;
-        }
-        pins.setPull(pinT, PinPullMode.PullNone)
-        pins.digitalWritePin(pinT, 0)
+    export function ultrasoundSensor(userPin: DigitalPin, distance_unit: Distance_Unit_List): number {
+        pins.setPull(userPin, PinPullMode.PullNone)
+        pins.digitalWritePin(userPin, 0)
         control.waitMicros(2)
-        pins.digitalWritePin(pinT, 1)
+        pins.digitalWritePin(userPin, 1)
         control.waitMicros(10)
-        pins.digitalWritePin(pinT, 0)
+        pins.digitalWritePin(userPin, 0)
 
         // read pulse
-        let d = pins.pulseIn(pinE, PulseValue.High, 25000)
+        let d = pins.pulseIn(userPin, PulseValue.High, 25000)
         let distance = d * 9 / 6 / 58
 
         if (distance > 400) {
@@ -1017,14 +934,13 @@ namespace OctupusX_Basic {
     * TODO: Detect soil moisture value(0~100%)
     * @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
     */
-    //% blockId="PIR" block="PIR sensor %Rjpin detects motion"
+    //% blockId="PIR" block="PIR sensor %UserPin detects motion"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor group="Digital"  color=#EA5532
-    export function PIR(Rjpin: DigitalRJPin): boolean {
-        let pin = DigitalPin.P1
-        pin = RJpin_to_digital(Rjpin)
-        if (pins.digitalReadPin(pin) == 1) {
+    export function PIR(userPin: DigitalPin): boolean {
+
+        if (pins.digitalReadPin(userPin) == 1) {
             return true
         }
         else {
@@ -1035,53 +951,38 @@ namespace OctupusX_Basic {
     * TODO: get pm2.5 value (μg/m³) 
     * @param soilmoisturepin describe parameter here, eg: DigitalRJPin.J1
     */
-    //% blockId="PM25" block="PM2.5 sensor %Rjpin value (μg/m³)"
+    //% blockId="PM25" block="PM2.5 sensor %UserPin value (μg/m³)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor group="Digital" color=#EA5532
-    export function PM25(Rjpin: DigitalRJPin): number {
-        let pin = DigitalPin.P1
-        let pm25 = 0
-        pin = RJpin_to_digital(Rjpin)
-        while (pins.digitalReadPin(pin) != 0) {
+    export function PM25(userPin: DigitalPin): number {
+let pm25 = 0
+while (pins.digitalReadPin(userPin) != 0) {
         }
-        while (pins.digitalReadPin(pin) != 1) {
+        while (pins.digitalReadPin(userPin) != 1) {
         }
         pm25 = input.runningTime()
-        while (pins.digitalReadPin(pin) != 0) {
+        while (pins.digitalReadPin(userPin) != 0) {
         }
         pm25 = input.runningTime() - pm25
         return pm25
     }
     /**
      * get dust value (μg/m³) 
-     * @param Rjpin describe parameter here, eg: Rjpin.J1
+     * @param Rjpin describe parameter here
      */
-    //% blockId="readdust" block="Dust sensor %Rjpin value (μg/m³)"
+    //% blockId="readdust" block="Dust sensor vLED:%UserPinvLED vO:%UserPinvO value (μg/m³)"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor color=#E2C438 group="Analog"
-    export function Dust(Rjpin: AnalogRJPin): number {
+    export function Dust(UserPinvLED: DigitalPin,UserPinvO:AnalogPin): number {
         let voltage = 0
         let dust = 0
-        let vo_pin = AnalogPin.P1
-        let vLED_pin = DigitalPin.P2
-        switch (Rjpin) {
-            case AnalogRJPin.J1:
-                vo_pin = AnalogPin.P1
-                vLED_pin = DigitalPin.P8
-                break;
-            case AnalogRJPin.J2:
-                vo_pin = AnalogPin.P2
-                vLED_pin = DigitalPin.P12
-                break;
-
-        }
-        pins.digitalWritePin(vLED_pin, 0);
+        pins.digitalWritePin(UserPinvLED, 0);
         control.waitMicros(160);
-        voltage = pins.analogReadPin(vo_pin);
+        voltage = pins.analogReadPin(UserPinvO);
         control.waitMicros(100);
-        pins.digitalWritePin(vLED_pin, 1);
+        pins.digitalWritePin(UserPinvLED, 1);
         voltage = pins.map(
             voltage,
             0,
@@ -1102,32 +1003,12 @@ namespace OctupusX_Basic {
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Sensor group="Digital" color=#EA5532
-    //% blockId=tracking_sensor block="Line-tracking sensor %Rjpin is %state"
-    export function trackingSensor(Rjpin: DigitalRJPin, state: TrackingStateType): boolean {
-        let lpin = DigitalPin.P1
-        let rpin = DigitalPin.P2
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                lpin = DigitalPin.P1
-                rpin = DigitalPin.P8
-                break;
-            case DigitalRJPin.J2:
-                lpin = DigitalPin.P2
-                rpin = DigitalPin.P12
-                break;
-            case DigitalRJPin.J3:
-                lpin = DigitalPin.P13
-                rpin = DigitalPin.P14
-                break;
-            case DigitalRJPin.J4:
-                lpin = DigitalPin.P15
-                rpin = DigitalPin.P16
-                break;
-        }
-        pins.setPull(lpin, PinPullMode.PullUp)
-        pins.setPull(rpin, PinPullMode.PullUp)
-        let lsensor = pins.digitalReadPin(lpin)
-        let rsensor = pins.digitalReadPin(rpin)
+    //% blockId=tracking_sensor block="Line-tracking sensor L:%userPinL R:%userPinRis %state"
+    export function trackingSensor(userPinL: DigitalPin, userPinR: DigitalPin,state: TrackingStateType): boolean {
+        pins.setPull(userPinL, PinPullMode.PullUp)
+        pins.setPull(userPinR, PinPullMode.PullUp)
+        let lsensor = pins.digitalReadPin(userPinL)
+        let rsensor = pins.digitalReadPin(userPinR)
         if (lsensor == 0 && rsensor == 0 && state == TrackingStateType.Tracking_State_0) {
             return true;
         } else if (lsensor == 0 && rsensor == 1 && state == TrackingStateType.Tracking_State_1) {
@@ -1186,11 +1067,11 @@ namespace OctupusX_Basic {
     * get dht11 temperature and humidity Value
     * @param dht11pin describe parameter here, eg: DigitalPin.P15     
     */
-    //% blockId="readdht11" block="DHT11 sensor %Rjpin %dht11state value"
+    //% blockId="readdht11" block="DHT11 sensor %UserPin %dht11state value"
     //% Rjpin.fieldEditor="gridpicker" dht11state.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2 dht11state.fieldOptions.columns=1
     //% subcategory=Sensor group="Digital" color=#EA5532
-    export function dht11Sensor(Rjpin: DigitalRJPin, dht11state: DHT11_state): number {
+    export function dht11Sensor(userPin: DigitalPin, dht11state: DHT11_state): number {
 
         //initialize
         let _temperature: number = -999.0
@@ -1199,26 +1080,25 @@ namespace OctupusX_Basic {
         let checksumTmp: number = 0
         let dataArray: boolean[] = []
         let resultArray: number[] = []
-        let pin = DigitalPin.P1
-        pin = RJpin_to_digital(Rjpin)
+
         for (let index = 0; index < 40; index++) dataArray.push(false)
         for (let index = 0; index < 5; index++) resultArray.push(0)
 
-        pins.setPull(pin, PinPullMode.PullUp)
-        pins.digitalWritePin(pin, 0) //begin protocol, pull down pin
+        pins.setPull(userPin, PinPullMode.PullUp)
+        pins.digitalWritePin(userPin, 0) //begin protocol, pull down pin
         basic.pause(18)
-        pins.digitalReadPin(pin) //pull up pin
+        pins.digitalReadPin(userPin) //pull up pin
         control.waitMicros(40)
-        while (pins.digitalReadPin(pin) == 0); //sensor response
-        while (pins.digitalReadPin(pin) == 1); //sensor response
+        while (pins.digitalReadPin(userPin) == 0); //sensor response
+        while (pins.digitalReadPin(userPin) == 1); //sensor response
 
         //read data (5 bytes)
         for (let index = 0; index < 40; index++) {
-            while (pins.digitalReadPin(pin) == 1);
-            while (pins.digitalReadPin(pin) == 0);
+            while (pins.digitalReadPin(userPin) == 1);
+            while (pins.digitalReadPin(userPin) == 0);
             control.waitMicros(28)
             //if sensor still pull up data pin after 28 us it means 1, otherwise 0
-            if (pins.digitalReadPin(pin) == 1) dataArray[index] = true
+            if (pins.digitalReadPin(userPin) == 1) dataArray[index] = true
         }
         //convert byte number array to integer
         for (let index = 0; index < 5; index++)
@@ -1651,129 +1531,67 @@ namespace OctupusX_Basic {
         }
         return true;
     }
-    //% blockId="potentiometer" block="Trimpot %Rjpin analog value"
+    //% blockId="potentiometer" block="Trimpot %UserPin analog value"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Input color=#E2C438 group="Analog"
-    export function trimpot(Rjpin: AnalogRJPin): number {
-        let pin = AnalogPin.P1
-        pin = RJpin_to_analog(Rjpin)
-        return pins.analogReadPin(pin)
-    }
-    //% blockId=buttonab block="Button %Rjpin %button is pressed"
-    //% Rjpin.fieldEditor="gridpicker"
-    //% Rjpin.fieldOptions.columns=2
-    //% button.fieldEditor="gridpicker"
-    //% button.fieldOptions.columns=1
-    //% subcategory=Input group="Digital" color=#EA5532
-    export function buttonCD(Rjpin: DigitalRJPin, button: ButtonStateList): boolean {
-        let pinC = DigitalPin.P1
-        let pinD = DigitalPin.P2
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pinC = DigitalPin.P1
-                pinD = DigitalPin.P8
-                break;
-            case DigitalRJPin.J2:
-                pinC = DigitalPin.P2
-                pinD = DigitalPin.P12
-                break;
-            case DigitalRJPin.J3:
-                pinC = DigitalPin.P13
-                pinD = DigitalPin.P14
-                break;
-            case DigitalRJPin.J4:
-                pinC = DigitalPin.P15
-                pinD = DigitalPin.P16
-                break;
-        }
-        pins.setPull(pinC, PinPullMode.PullUp)
-        pins.setPull(pinD, PinPullMode.PullUp)
-        if (pins.digitalReadPin(pinD) == 0 && pins.digitalReadPin(pinC) == 0 && button == ButtonStateList.CD) {
-            return true
-        }
-        else if (pins.digitalReadPin(pinC) == 0 && pins.digitalReadPin(pinD) == 1 && button == ButtonStateList.C) {
-            return true
-        }
-        else if (pins.digitalReadPin(pinD) == 0 && pins.digitalReadPin(pinC) == 1 && button == ButtonStateList.D) {
-            return true
-        }
-        else {
-            return false
-        }
+    export function trimpot(userPin: AnalogPin): number {
+        return pins.analogReadPin(userPin)
     }
     /**
     * toggle fans
     */
-    //% blockId=fans block="Motor fan %Rjpin toggle to $fanstate || speed %speed \\%"
+    //% blockId=fans block="Motor fan %UserPin toggle to $fanstate || speed %speed \\%"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% fanstate.shadow="toggleOnOff"
     //% subcategory=Excute group="Digital" color=#EA5532
     //% speed.min=0 speed.max=100
     //% expandableArgumentMode="toggle"
-    export function motorFan(Rjpin: DigitalRJPin, fanstate: boolean, speed: number = 100): void {
-        let pin = AnalogPin.P1
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pin = AnalogPin.P1
-                break;
-            case DigitalRJPin.J2:
-                pin = AnalogPin.P2
-                break;
-            case DigitalRJPin.J3:
-                pin = AnalogPin.P13
-                break;
-            case DigitalRJPin.J4:
-                pin = AnalogPin.P15
-                break;
-        }
+    export function motorFan(userPin: AnalogPin, fanstate: boolean, speed: number = 100): void {
         if (fanstate) {
-            pins.analogSetPeriod(pin, 100)
-            pins.analogWritePin(pin, Math.map(speed, 0, 100, 0, 1023))
+            pins.analogSetPeriod(userPin, 100)
+            pins.analogWritePin(userPin, Math.map(speed, 0, 100, 0, 1023))
         }
         else {
-            pins.analogWritePin(pin, 0)
+            pins.analogWritePin(userPin, 0)
             speed = 0
         }
     }
     /**
     * toggle laserSensor
     */
-    //% blockId=laserSensor block="Laser %Rjpin toggle to $laserstate"
+    //% blockId=laserSensor block="Laser %UserPin toggle to $laserstate"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% laserstate.shadow="toggleOnOff"
     //% subcategory=Excute group="Digital" color=#EA5532
-    export function laserSensor(Rjpin: DigitalRJPin, laserstate: boolean): void {
-        let pin = DigitalPin.P1
-        pin = RJpin_to_digital(Rjpin)
+    export function laserSensor(userPin: DigitalPin, laserstate: boolean): void {
         if (laserstate) {
-            pins.digitalWritePin(pin, 1)
+            pins.digitalWritePin(userPin, 1)
         }
         else {
-            pins.digitalWritePin(pin, 0)
+            pins.digitalWritePin(userPin, 0)
         }
     }
 
     /**
     * toggle Relay
     */
-    //% blockId=Relay block="Relay %Rjpin toggle to %Relaystate"
+    //% blockId=Relay block="Relay %UserPin toggle to %Relaystate"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% Relaystate.fieldEditor="gridpicker"
     //% Relaystate.fieldOptions.columns=1
     //% subcategory=Excute group="Digital" color=#EA5532
-    export function Relay(Rjpin: DigitalRJPin, Relaystate: RelayStateList): void {
-        let pin = DigitalPin.P1
-        pin = RJpin_to_digital(Rjpin)
+    export function Relay(userPin: DigitalPin, Relaystate: RelayStateList): void {
+
         switch (Relaystate) {
             case RelayStateList.On:
-                pins.digitalWritePin(pin, 0)
+                pins.digitalWritePin(userPin, 0)
                 break;
             case RelayStateList.Off:
-                pins.digitalWritePin(pin, 1)
+                pins.digitalWritePin(userPin, 1)
                 break;
         }
     }
@@ -1885,28 +1703,13 @@ namespace OctupusX_Basic {
      * TODO: Initializing the MP3 connection port as a serial port
      * @param pinRX Serial port TX pin of micro:bit
      */
-    //% blockId=MP3setPort block="Set the MP3 port to %Rjpin"
+    //% blockId=MP3setPort block="Set the MP3 port to %UserPin"
     //% Rjpin.fieldEditor="gridpicker"
     //% Rjpin.fieldOptions.columns=2
     //% subcategory=Excute group="MP3" color=#EA5532
-    export function MP3SetPort(Rjpin: DigitalRJPin): void {
-        let pin = SerialPin.USB_TX
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pin = SerialPin.P8
-                break;
-            case DigitalRJPin.J2:
-                pin = SerialPin.P12
-                break;
-            case DigitalRJPin.J3:
-                pin = SerialPin.P14
-                break;
-            case DigitalRJPin.J4:
-                pin = SerialPin.P16
-                break;
-        }
+    export function MP3SetPort(userPin: SerialPin): void {
         serial.redirect(
-            pin,
+            userPin,
             SerialPin.USB_RX,
             BaudRate.BaudRate9600
         )
