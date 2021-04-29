@@ -12,7 +12,9 @@
         "README.md",
         "Wukong.ts",
         "main.ts",
-        "display.ts"
+        "display.ts",
+        "_locales/zh-CN/pxt-OctopusX-jsdoc-strings.json",
+        "_locales/zh-CN/pxt-OctopusX-strings.json"
     ],
     "testFiles": [
         "test.ts"
