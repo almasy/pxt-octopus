@@ -1072,7 +1072,7 @@ while (pins.digitalReadPin(userPin) != 0) {
     //% Rjpin.fieldOptions.columns=2 dht11state.fieldOptions.columns=1
     //% subcategory=Sensor group="Digital" color=#EA5532
     export function dht11Sensor(userPin: DigitalPin, dht11state: DHT11_state): number {
-
+        basic.pause(2000)
         //initialize
         let _temperature: number = -999.0
         let _humidity: number = -999.0
