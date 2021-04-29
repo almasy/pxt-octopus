@@ -5,8 +5,7 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*",
-        "neopixel": "github:elecfreaks/pxt-neopixel"
+        "microphone": "*"
     },
     "files": [
         "README.md",
