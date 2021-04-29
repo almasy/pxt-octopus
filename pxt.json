@@ -11,7 +11,8 @@
     "files": [
         "README.md",
         "main.ts",
-        "display.ts"
+        "display.ts",
+        "Wukong.ts"
     ],
     "testFiles": [
         "test.ts"
