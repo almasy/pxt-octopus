@@ -10,9 +10,9 @@
     },
     "files": [
         "README.md",
+        "Wukong.ts",
         "main.ts",
-        "display.ts",
-        "Wukong.ts"
+        "display.ts"
     ],
     "testFiles": [
         "test.ts"
