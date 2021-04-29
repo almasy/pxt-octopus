@@ -287,7 +287,7 @@ namespace OctopusX_Display {
     //% Rjpin.fieldEditor="gridpicker" Rjpin.fieldOptions.columns=2
     //% brightness.min=0 brightness.max=100
     //% ledstate.shadow="toggleOnOff"
-    //% subcategory=Display group="Digital" color=#EA5532
+    //% subcategory=Led group="Digital" color=#EA5532
     //% expandableArgumentMode="toggle"
     export function ledBrightness(Rjpin: DigitalRJPin, ledstate: boolean, brightness: number = 100): void {
         let pin = AnalogPin.P1
@@ -314,7 +314,7 @@ namespace OctopusX_Display {
             brightness = 0
         }
     }
-    //% subcategory=Display group="8*16 Matrix" color=#00B1ED
+    //% subcategory=Matrix group="8*16 Matrix" color=#00B1ED
     //% blockId= matrix_refresh block="Matrix Refresh" 
     export function matrixRefresh(): void {
         if (!initializedMatrix) {
@@ -323,7 +323,7 @@ namespace OctopusX_Display {
         }
         matrixShow();
     }
-    //% subcategory=Display group="8*16 Matrix" color=#00B1ED
+    //% subcategory=Matrix group="8*16 Matrix" color=#00B1ED
     //% blockId= matrix_clear block="Matrix Clear"
     export function matrixClear(): void {
         if (!initializedMatrix) {
@@ -336,7 +336,7 @@ namespace OctopusX_Display {
         matrixShow();
     }
     //% blockId= matrix_draw block="Matrix Draw|X %x|Y %y"
-    //% subcategory=Display group="8*16 Matrix" color=#00B1ED
+    //% subcategory=Matrix group="8*16 Matrix" color=#00B1ED
     export function matrixDraw(x: number, y: number): void {
         if (!initializedMatrix) {
             matrixInit();
@@ -352,7 +352,7 @@ namespace OctopusX_Display {
         matBuf[idx + 1] = tmp;
     }
     //% block="Matrix show emoji %ID" color=#00B1ED
-    //% subcategory=Display group="8*16 Matrix" 
+    //% subcategory=Matrix group="8*16 Matrix" 
     export function matrixEmoji(ID: EmojiList) {
         matrixClear();
         let point;
@@ -411,7 +411,7 @@ namespace OctopusX_Display {
     //% line.min=1 line.max=8 line.defl=1
     //% text.defl="Hello,ELECFREAKS"
     //% block="OLED show line %line|text %text"
-    //% subcategory=Display group="OLED" color=#00B1ED
+    //% subcategory=OLED group="OLED" color=#00B1ED
     export function showUserText(line: number, text: string) {
         if (firstoledinit) {
             oledinit()
@@ -434,7 +434,7 @@ namespace OctopusX_Display {
     //% line.min=1 line.max=8 line.defl=2 
     //% n.defl=20200508
     //% block="OLED show line %line|number %n"
-    //% subcategory=Display group="OLED" color=#00B1ED
+    //% subcategory=OLED group="OLED" color=#00B1ED
     export function showUserNumber(line: number, n: number) {
         if (firstoledinit) {
             oledinit()
@@ -443,7 +443,7 @@ namespace OctopusX_Display {
         showUserText(line, "" + n)
     }
     //% block="clear display" color=#00B1ED
-    //% subcategory=Display group="OLED"
+    //% subcategory=OLED group="OLED"
     export function oledClear() {
         //oledcmd(DISPLAY_OFF);   //display off
         for (let j = 0; j < 8; j++) {
@@ -464,7 +464,7 @@ namespace OctopusX_Display {
    * @param dataPin value of data pin number
    */
     //% blockId=grove_tm1637_create block="connect 4-Digit Display |pin %pin|"
-    //% subcategory=Display group="7-Seg 4-Dig LED Nixietube" blockSetVariable=display color=#EA5532
+    //% subcategory=Nixietube group="7-Seg 4-Dig LED Nixietube" blockSetVariable=display color=#EA5532
     export function tm1637Create(Rjpin: DigitalRJPin, intensity: number = 7, count: number = 4): TM1637LEDs {
         let display = new TM1637LEDs();
         switch (Rjpin) {
@@ -574,7 +574,7 @@ namespace OctopusX_Display {
          * @param bitAddr value of bit number
          */
         //% blockId=grove_tm1637_display_bit block="%display|show single number|%num|at digit|%bit"
-        //% subcategory=Display group="7-Seg 4-Dig LED Nixietube" color=#EA5532
+        //% subcategory=Nixietube group="7-Seg 4-Dig LED Nixietube" color=#EA5532
         //% bit.defl=1 bit.min=0 bit.max=9
         showbit(num: number = 5, bit: number = 0) {
             bit = Math.map(bit, 4, 1, 0, 3)
@@ -586,7 +586,7 @@ namespace OctopusX_Display {
          * @param dispData value of number
          */
         //% blockId=grove_tm1637_display_number block="%display|show number|%num"
-        //% subcategory=Display group="7-Seg 4-Dig LED Nixietube" color=#EA5532
+        //% subcategory=Nixietube group="7-Seg 4-Dig LED Nixietube" color=#EA5532
         showNumber(num: number) {
             if (num < 0) {
                 num = -num
@@ -610,7 +610,7 @@ namespace OctopusX_Display {
          */
         //% blockId="TM1637_showDP" block="%display|DotPoint at %bit|show $show"
         //% show.shadow="toggleOnOff"
-        //% subcategory=Display group="7-Seg 4-Dig LED Nixietube" color=#EA5532
+        //% subcategory=Nixietube group="7-Seg 4-Dig LED Nixietube" color=#EA5532
         showDP(bit: number = 1, show: boolean = true) {
             bit = Math.map(bit, 4, 1, 0, 3)
             bit = bit % this.count
@@ -621,7 +621,7 @@ namespace OctopusX_Display {
          * clear LED. 
          */
         //% blockId="TM1637_clear" block="clear display %display"
-        //% subcategory=Display group="7-Seg 4-Dig LED Nixietube" color=#EA5532
+        //% subcategory=Nixietube group="7-Seg 4-Dig LED Nixietube" color=#EA5532
         clear() {
             for (let i = 0; i < this.count; i++) {
                 this._dat(i, 0)
