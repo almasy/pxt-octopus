@@ -229,7 +229,7 @@
   "{id:group}IIC Port": "IIC 接口",
   "{id:group}MP3": "MP3",
   "{id:group}OLED": "OLED",
-  "{id:subcategory}Excute": "执行",
+  "{id:subcategory}Excute": "执行单元",
   "{id:subcategory}Input": "输入单元",
   "{id:subcategory}Led": "Led",
   "{id:subcategory}Matrix": "点阵显示屏",
