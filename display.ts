@@ -1,8 +1,7 @@
 /**
 * Functions to OctopusX sensor by ELECFREAKS Co.,Ltd.
 */
-//% color=#EA5532 icon="\uf110" block="OctopusX_Display" blockId="OctopusX_Display"
-
+//% color=#EA5532 icon="\uf0eb" block="OctopusX_Display" blockId="OctopusX_Display"
 namespace OctopusX_Display {
     ////////////////////////////////TM 1637/////////////////
     let TM1637_CMD1 = 0x40;
