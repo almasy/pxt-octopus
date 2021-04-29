@@ -184,23 +184,6 @@ namespace OctopusX_Display {
         matBuf[0] = 0x00;
         pins.i2cWriteBuffer(HT16K33_ADDRESS, matBuf);
     }
-    ///////////////////////////////enum
-    export enum DigitalRJPin {
-        //% block="J1" 
-        J1,
-        //% block="J2"
-        J2,
-        //% block="J3"
-        J3,
-        //% block="J4"
-        J4
-    }
-    export enum AnalogRJPin {
-        //% block="J1"
-        J1,
-        //% block="J2"
-        J2
-    }
     export enum EmojiList {
         //% block="😆"
         Grinning_Squinting_Face,
@@ -247,70 +230,24 @@ namespace OctopusX_Display {
         //% block="RGB (RGB format)"
         RGB_RGB = 2
     }
-    ///////////////////////////////////////////////////////RJpin_to_pin
-    function RJpin_to_analog(Rjpin: AnalogRJPin): any {
-        let pin = AnalogPin.P1
-        switch (Rjpin) {
-            case AnalogRJPin.J1:
-                pin = AnalogPin.P1
-                break;
-            case AnalogRJPin.J2:
-                pin = AnalogPin.P2
-                break;
-        }
-        return pin
-    }
-    function RJpin_to_digital(Rjpin: DigitalRJPin): any {
-        let pin = DigitalPin.P1
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pin = DigitalPin.P8
-                break;
-            case DigitalRJPin.J2:
-                pin = DigitalPin.P12
-                break;
-            case DigitalRJPin.J3:
-                pin = DigitalPin.P14
-                break;
-            case DigitalRJPin.J4:
-                pin = DigitalPin.P16
-                break;
-        }
-        return pin
-    }
     /////////////////////////////User_function//////////////////
 
     /**
     * toggle led
     */
-    //% blockId=LED block="LED %Rjpin toggle to $ledstate || brightness %brightness \\%"
-    //% Rjpin.fieldEditor="gridpicker" Rjpin.fieldOptions.columns=2
+    //% blockId=LED block="LED %UserPin toggle to $ledstate || brightness %brightness \\%"
+    //% UserPin.fieldEditor="gridpicker" UserPin.fieldOptions.columns=2
     //% brightness.min=0 brightness.max=100
     //% ledstate.shadow="toggleOnOff"
     //% subcategory=Led group="Digital" color=#EA5532
     //% expandableArgumentMode="toggle"
-    export function ledBrightness(Rjpin: DigitalRJPin, ledstate: boolean, brightness: number = 100): void {
-        let pin = AnalogPin.P1
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                pin = AnalogPin.P1
-                break;
-            case DigitalRJPin.J2:
-                pin = AnalogPin.P2
-                break;
-            case DigitalRJPin.J3:
-                pin = AnalogPin.P13
-                break;
-            case DigitalRJPin.J4:
-                pin = AnalogPin.P15
-                break;
-        }
+    export function ledBrightness(UserPin: AnalogPin, ledstate: boolean, brightness: number = 100): void {
         if (ledstate) {
-            pins.analogSetPeriod(pin, 100)
-            pins.analogWritePin(pin, Math.map(brightness, 0, 100, 0, 1023))
+            pins.analogSetPeriod(UserPin, 100)
+            pins.analogWritePin(UserPin, Math.map(brightness, 0, 100, 0, 1023))
         }
         else {
-            pins.analogWritePin(pin, 0)
+            pins.analogWritePin(UserPin, 0)
             brightness = 0
         }
     }
@@ -463,28 +400,12 @@ namespace OctopusX_Display {
    * @param clkPin value of clk pin number
    * @param dataPin value of data pin number
    */
-    //% blockId=grove_tm1637_create block="connect 4-Digit Display |pin %pin|"
+    //% blockId=grove_tm1637_create block="connect 4-Digit Display clk:%pinclk dio:pindio"
     //% subcategory=Nixietube group="7-Seg 4-Dig LED Nixietube" blockSetVariable=display color=#EA5532
-    export function tm1637Create(Rjpin: DigitalRJPin, intensity: number = 7, count: number = 4): TM1637LEDs {
+    export function tm1637Create(clk: DigitalPin, dio:DigitalPin,intensity: number = 7, count: number = 4): TM1637LEDs {
         let display = new TM1637LEDs();
-        switch (Rjpin) {
-            case DigitalRJPin.J1:
-                display.clk = DigitalPin.P1
-                display.dio = DigitalPin.P8
-                break;
-            case DigitalRJPin.J2:
-                display.clk = DigitalPin.P2
-                display.dio = DigitalPin.P12
-                break;
-            case DigitalRJPin.J3:
-                display.clk = DigitalPin.P13
-                display.dio = DigitalPin.P14
-                break;
-            case DigitalRJPin.J4:
-                display.clk = DigitalPin.P15
-                display.dio = DigitalPin.P16
-                break;
-        }
+        display.clk = clk
+        display.dio = dio
         if ((count < 1) || (count > 5)) count = 4;
         display.count = count;
         display.brightness = intensity;
