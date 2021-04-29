@@ -2,7 +2,7 @@
 * Functions to OctopusX sensor by ELECFREAKS Co.,Ltd.
 */
 //% color=#EA5532 icon="\uf110" block="OctopusX_Display" blockId="OctopusX_Display"
-//% groups='["LED", "Digital", "Analog", "IIC Port", "OLED", "8*16 Matrix", "7-Seg 4-Dig LED Nixietube"]'
+
 namespace OctopusX_Display {
     ////////////////////////////////TM 1637/////////////////
     let TM1637_CMD1 = 0x40;
