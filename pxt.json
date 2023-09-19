@@ -1,6 +1,6 @@
 {
-    "name": "pxt-OctopusX",
-    "version": "0.0.3",
+    "name": "pxt-octopus",
+    "version": "0.0.4",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -9,7 +9,6 @@
     },
     "files": [
         "README.md",
-        "Wukong.ts",
         "main.ts",
         "display.ts",
         "_locales/zh-CN/pxt-OctopusX-jsdoc-strings.json",
