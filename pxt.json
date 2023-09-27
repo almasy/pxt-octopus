@@ -11,8 +11,8 @@
         "README.md",
         "main.ts",
         "display.ts",
-        "_locales/zh-CN/pxt-OctopusX-jsdoc-strings.json",
-        "_locales/zh-CN/pxt-OctopusX-strings.json"
+        "_locales/zh-CN/pxt-octopus-jsdoc-strings.json",
+        "_locales/zh-CN/pxt-octopus-strings.json"
     ],
     "testFiles": [
         "test.ts"
