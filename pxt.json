@@ -1,6 +1,6 @@
 {
     "name": "pxt-octopus",
-    "version": "0.0.7",
+    "version": "0.1.0",
     "description": "",
     "dependencies": {
         "core": "*",
